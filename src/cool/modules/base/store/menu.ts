@@ -6,6 +6,7 @@ import { deepTree, revDeepTree, isArray, isEmpty } from "/@/core/utils";
 import { menuList } from "/@/config/env";
 import { revisePath } from "../utils";
 import { MenuItem } from "../types";
+import { usePermission } from "/@/core";
 
 const state = {
 	// 视图路由，type=1
@@ -85,7 +86,7 @@ const actions = {
 
 			// 监测自定义菜单
 			if (!getters.app.conf.customMenu) {
-				store.service.common
+				store.service.base.common
 					.permMenu()
 					.then((res: any) => {
 						next(res);
@@ -141,6 +142,7 @@ const mutations = {
 	SET_PERMIESSION(state: any, list: Array<any>) {
 		state.permission = list;
 		storage.set("permission", list);
+		usePermission(list);
 	}
 };
 

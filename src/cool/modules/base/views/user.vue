@@ -28,7 +28,7 @@
 							<cl-add-btn />
 							<cl-multi-delete-btn />
 							<el-button
-								v-permission="service.system.user.permission.move"
+								v-permission="service.base.system.user.permission.move"
 								size="mini"
 								type="success"
 								:disabled="selects.ids.length == 0"
@@ -71,7 +71,7 @@
 								<!-- 单个转移 -->
 								<template #slot-move-btn="{ scope }">
 									<el-button
-										v-permission="service.system.user.permission.move"
+										v-permission="service.base.system.user.permission.move"
 										type="text"
 										size="mini"
 										@click="toMove(scope.row)"
@@ -90,14 +90,7 @@
 							:ref="setRefs('upsert')"
 							:items="upsert.items"
 							:on-submit="onUpsertSubmit"
-						>
-							<template #slot-tips>
-								<div>
-									<i class="el-icon-warning"></i>
-									<span style="margin-left: 6px">新增用户默认密码为：123456</span>
-								</div>
-							</template>
-						</cl-upsert>
+						/>
 					</cl-crud>
 				</div>
 			</div>
@@ -236,7 +229,7 @@ export default defineComponent({
 				{
 					prop: "name",
 					label: "姓名",
-					span: 24,
+					span: 12,
 					component: {
 						name: "el-input",
 						props: {
@@ -284,7 +277,6 @@ export default defineComponent({
 					prop: "password",
 					label: "密码",
 					span: 12,
-					hidden: ":isAdd",
 					component: {
 						name: "el-input",
 						props: {
@@ -370,13 +362,6 @@ export default defineComponent({
 							}
 						]
 					}
-				},
-				{
-					prop: "tips",
-					hidden: ":isEdit",
-					component: {
-						name: "slot-tips"
-					}
 				}
 			]
 		});
@@ -397,7 +382,7 @@ export default defineComponent({
 
 		// crud 加载
 		function onLoad({ ctx, app }: any) {
-			ctx.service(service.system.user).done();
+			ctx.service(service.base.system.user).done();
 			app.refresh();
 		}
 

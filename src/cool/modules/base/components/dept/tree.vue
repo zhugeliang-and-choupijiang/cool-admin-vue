@@ -113,7 +113,7 @@ export default defineComponent({
 			isDrag.value = false;
 			loading.value = true;
 
-			await service.system.dept.list().then((res: any[]) => {
+			await service.base.system.dept.list().then((res: any[]) => {
 				list.value = deepTree(res);
 				emit("list-change", list.value);
 			});
@@ -181,7 +181,7 @@ export default defineComponent({
 				],
 				on: {
 					submit: (data: any, { done, close }: any) => {
-						service.system.dept[method]({
+						service.base.system.dept[method]({
 							id: e.id,
 							parentId: e.parentId,
 							name: data.name,
@@ -204,7 +204,7 @@ export default defineComponent({
 		// 删除部门
 		function rowDel(e: any) {
 			const del = async (f: boolean) => {
-				await service.system.dept
+				await service.base.system.dept
 					.delete({
 						ids: [e.id],
 						deleteUser: f
@@ -261,7 +261,7 @@ export default defineComponent({
 
 						deep(list.value, null);
 
-						await service.system.dept
+						await service.base.system.dept
 							.order(
 								ids.map((e, i) => {
 									return {
@@ -298,7 +298,9 @@ export default defineComponent({
 					{
 						label: "新增",
 						"suffix-icon": "el-icon-plus",
-						hidden: n && n.level >= props.level,
+						hidden:
+							(n && n.level >= props.level) ||
+							!service.base.system.dept._permission.add,
 						callback: (_: any, done: Function) => {
 							rowEdit({
 								name: "",
@@ -311,6 +313,7 @@ export default defineComponent({
 					{
 						label: "编辑",
 						"suffix-icon": "el-icon-edit",
+						hidden: !service.base.system.dept._permission.update,
 						callback: (_: any, done: Function) => {
 							rowEdit(d);
 							done();
@@ -319,7 +322,7 @@ export default defineComponent({
 					{
 						label: "删除",
 						"suffix-icon": "el-icon-delete",
-						hidden: !d.parentId,
+						hidden: !d.parentId || !service.base.system.dept._permission.delete,
 						callback: (_: any, done: Function) => {
 							rowDel(d);
 							done();
@@ -328,6 +331,7 @@ export default defineComponent({
 					{
 						label: "新增成员",
 						"suffix-icon": "el-icon-user",
+						hidden: !service.base.system.user._permission.add,
 						callback: (_: any, done: Function) => {
 							emit("user-add", d);
 							done();

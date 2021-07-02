@@ -33,12 +33,11 @@ function change(el: any, binding: any) {
 }
 
 export default {
-	inserted(el: any, binding: any) {
+	beforeMount(el: any, binding: any) {
 		el.setAttribute("_display", el.style.display || "");
-
 		change(el, binding);
 	},
-	update: change
+	updated: change
 };
 
 export { checkPerm };
